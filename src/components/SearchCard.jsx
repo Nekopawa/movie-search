@@ -1,3 +1,5 @@
+import "../styles/searchCard.css";
+
 export default function SearchCard() {
     return (
         <section id="search-card__container">
