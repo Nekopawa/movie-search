@@ -1,12 +1,20 @@
 import "./App.css";
+import FavoritesBar from "./components/FavoritesBar";
 import Header from "./components/Header";
-import SearchCard from "./components/SearchCard";
+import MovieDetails from "./components/MovieDetails";
+import PopularSearches from "./components/PopularSearches";
+import SearchBar from "./components/SearchBar";
+import SearchResults from "./components/SearchResults";
 
 function App() {
     return (
         <>
             <Header />
-            <SearchCard />
+            <SearchBar />
+            <SearchResults />
+            <MovieDetails />
+            <PopularSearches />
+            <FavoritesBar />
         </>
     );
 }

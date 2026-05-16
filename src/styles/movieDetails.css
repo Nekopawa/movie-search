@@ -1,0 +1,6 @@
+#movie-details__container {
+    grid-area: details;
+    background-color: var(--background-color-secondary);
+    border-radius: 10px;
+    padding: 15px;
+}

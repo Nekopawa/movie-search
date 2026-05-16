@@ -1,6 +1,6 @@
-import "../styles/searchCard.css";
+import "../styles/searchBar.css";
 
-export default function SearchCard() {
+export default function SearchBar() {
     return (
         <section id="search-card__container">
             <h1>Find Movies You'll Love</h1>
