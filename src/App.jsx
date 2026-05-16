@@ -1,7 +1,14 @@
 import "./App.css";
+import Header from "./components/Header";
+import SearchCard from "./components/SearchCard";
 
 function App() {
-    return <></>;
+    return (
+        <>
+            <Header />
+            <SearchCard />
+        </>
+    );
 }
 
 export default App;
