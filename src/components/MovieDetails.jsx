@@ -42,7 +42,11 @@ export default function MovieDetails() {
 
             <button id="add-favorites__button">
                 <picture>
-                    <img src="./favorite_icon.svg" alt="Heart"></img>
+                    <img
+                        src="./favorite_icon.svg"
+                        alt="Heart"
+                        height="25px"
+                    ></img>
                 </picture>
                 <p>Add to favorites</p>
             </button>

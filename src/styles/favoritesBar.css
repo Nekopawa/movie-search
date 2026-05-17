@@ -4,3 +4,50 @@
     border-radius: 10px;
     padding: 15px;
 }
+
+#favorites__title h2 {
+    margin-right: 10px;
+}
+
+#favorites__list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.favorite__title {
+    margin: 8px 0;
+}
+
+.favorite-card__text {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.favorite__year {
+    margin-left: 8px;
+    font-size: 14px;
+    color: var(--lightgrey);
+}
+
+#favorites__title {
+    display: flex;
+    flex-direction: row;
+}
+
+.favorite__card {
+    position: relative;
+}
+
+.delete__button {
+    height: 25px;
+    width: 25px;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    border: 0;
+    border-radius: 50%;
+    background-color: #d3d3d3aa;
+    color: red;
+}
