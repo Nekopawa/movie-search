@@ -1,0 +1,32 @@
+.film__card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: solid 1px var(--border-grey);
+    border-radius: 10px;
+}
+
+.film__card h3 {
+    font-size: 0.9rem;
+    margin: 6px 0;
+}
+
+.card__year {
+    color: var(--text-color-secondary);
+    font-size: 12px;
+}
+
+.card__rating {
+    display: flex;
+    align-items: center;
+    margin: 6px 0;
+}
+
+.card__rating img {
+    height: 20px;
+}
+
+.card__rating p {
+    font-size: 0.8rem;
+}

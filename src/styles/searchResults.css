@@ -3,4 +3,42 @@
     background-color: var(--background-color-secondary);
     border-radius: 10px;
     padding: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+#search-results__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 1fr 1fr;
+    grid-gap: 15px 15px;
+}
+
+#search-results__title {
+    display: flex;
+    flex-direction: row;
+}
+
+#results_amount {
+    height: 22px;
+    width: 22px;
+    background-color: var(--highlights);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    margin-left: 10px;
+}
+
+#load-more__button {
+    height: 40px;
+    width: 100px;
+    background-color: inherit;
+    border: 1px solid var(--border-grey);
+    border-radius: 10px;
+    color: var(--highlights);
+    margin-top: 1rem;
+    align-self: center;
 }

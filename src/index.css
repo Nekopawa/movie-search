@@ -6,7 +6,8 @@
     --text-color: #f8fafc;
     --text-color-secondary: #d3d3d3;
     --highlights: #8d64ed;
-    --input-background-color: #484f5e;
+    --border-grey: #484f5e;
+    --lightgrey: #d3d3d3;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -20,12 +21,13 @@
     padding: 15px;
     display: grid;
     grid-template-areas:
-        "header header header"
-        "search search search"
-        "results results details"
-        "tags tags tags"
-        "favorites favorites favorites";
+        "header header header header header"
+        "search search search search search"
+        "results results results details details"
+        "tags tags tags tags tags"
+        "favorites favorites favorites favorites favorites";
     grid-gap: 15px 15px;
     grid-template-rows: 0.3fr 1fr 3fr 0.5fr 1.5fr;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     background-color: var(--background-color);
 }
