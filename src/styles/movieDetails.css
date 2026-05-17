@@ -58,6 +58,7 @@
     text-overflow: ellipsis;
     overflow: hidden;
     display: -webkit-box;
+    line-clamp: 4;
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
 }
@@ -76,6 +77,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 
 #add-favorites__button p {

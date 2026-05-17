@@ -41,4 +41,5 @@
     color: var(--highlights);
     margin-top: 1rem;
     align-self: center;
+    cursor: pointer;
 }
