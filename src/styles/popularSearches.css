@@ -4,3 +4,24 @@
     border-radius: 10px;
     padding: 15px;
 }
+
+#popular-searches__container ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    list-style-type: none;
+}
+
+#popular-searches__container ul li {
+    height: 35px;
+    background-color: var(--border-grey);
+    border-radius: 10px;
+    text-transform: capitalize;
+    padding: 0 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    color: var(--lightgrey);
+}
