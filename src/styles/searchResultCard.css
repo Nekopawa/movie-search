@@ -1,4 +1,4 @@
-.film__card {
+.movie_card {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -7,7 +7,7 @@
     border-radius: 10px;
 }
 
-.film__card h3 {
+.movie_card h3 {
     font-size: 0.9rem;
     margin: 6px 0;
 }

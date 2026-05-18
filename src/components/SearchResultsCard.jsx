@@ -1,10 +1,19 @@
 import "../styles/searchResultCard.css";
 
-export default function SearchResultCard({ film }) {
-    const { title, year, rating, image } = film;
+const MOVIE_IMAGE_API = "https://image.tmdb.org/t/p/w500/";
+
+export default function SearchResultCard({ movie }) {
+    const {
+        poster_path: posterPath,
+        title,
+        release_date: releaseDate,
+        vote_average: rating,
+    } = movie;
+    const year = releaseDate.substr(0, 4);
+    const image = `${MOVIE_IMAGE_API}${posterPath}`;
 
     return (
-        <div className="film__card">
+        <div className="movie_card">
             <picture>
                 <img src={image} height="180px"></img>
             </picture>
@@ -14,7 +23,7 @@ export default function SearchResultCard({ film }) {
                 <picture>
                     <img src="./star_icon.svg" alt="Star"></img>
                 </picture>
-                <p>{rating}</p>
+                <p>{Number(rating).toFixed(2)}</p>
             </div>
         </div>
     );
