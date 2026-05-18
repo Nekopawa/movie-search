@@ -7,8 +7,8 @@ import PopularSearches from "./components/PopularSearches";
 import SearchBar from "./components/SearchBar";
 import SearchResults from "./components/SearchResults";
 
-const MOVIES_API =
-    "https://api.themoviedb.org/3/search/movie?api_key=79376831a1d38242737857a8c39fe36c&query=";
+const apiKey = import.meta.env.VITE_API_KEY;
+const MOVIES_API = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=`;
 
 function App() {
     const [movies, setMovies] = useState([]);

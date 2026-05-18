@@ -47,8 +47,12 @@ export default function SearchBar({ onSearchMovies }) {
             <div id="suggested-titles">
                 <p>Try:</p>
                 <ul>
-                    {suggestedTitles.map((title) => {
-                        return <li onClick={handleClickSuggested}>{title}</li>;
+                    {suggestedTitles.map((title, index) => {
+                        return (
+                            <li key={index} onClick={handleClickSuggested}>
+                                {title}
+                            </li>
+                        );
                     })}
                 </ul>
             </div>
