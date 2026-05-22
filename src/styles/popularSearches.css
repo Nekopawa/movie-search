@@ -24,4 +24,5 @@
     align-items: center;
     margin-right: 10px;
     color: var(--lightgrey);
+    cursor: pointer;
 }

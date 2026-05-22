@@ -203,7 +203,7 @@ function App() {
                 onRemoveFavorite={handleRemoveFavorite}
                 favorites={favorites}
             />
-            <PopularSearches />
+            <PopularSearches onSearchMovies={handleSearch} />
             <FavoritesBar
                 favorites={favorites}
                 onRemoveFavorite={handleRemoveFavorite}
