@@ -1,15 +1,18 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "../styles/searchBar.css";
 
+const API_KEY = import.meta.env.VITE_API_KEY;
+const TRENDING_MOVIES_API = `https://api.themoviedb.org/3/trending/movie/day?api_key=${API_KEY}`;
+
 export default function SearchBar({ onSearchMovies }) {
-    const inputRef = useRef(null);
-    const suggestedTitles = [
+    const [trendingMovies, setTrendingMovies] = useState([
         "Flow",
         "Matrix",
         "Demon Slayer",
         "Batman",
         "Dark",
-    ];
+    ]);
+    const inputRef = useRef(null);
 
     function handleSearch() {
         onSearchMovies(inputRef.current.value);
@@ -22,6 +25,27 @@ export default function SearchBar({ onSearchMovies }) {
     function handleClickSuggested(event) {
         onSearchMovies(event.target.textContent);
     }
+
+    useEffect(() => {
+        async function fetchTrending() {
+            try {
+                const response = await fetch(TRENDING_MOVIES_API);
+
+                if (!response.ok) return;
+
+                const data = await response.json();
+                const titles = data.results
+                    .slice(0, 5)
+                    .map((movie) => movie.title);
+
+                setTrendingMovies(titles);
+            } catch {
+                return;
+            }
+        }
+
+        fetchTrending();
+    }, []);
 
     return (
         <section id="search-card__container">
@@ -47,7 +71,7 @@ export default function SearchBar({ onSearchMovies }) {
             <div id="suggested-titles">
                 <p>Try:</p>
                 <ul>
-                    {suggestedTitles.map((title, index) => {
+                    {trendingMovies.map((title, index) => {
                         return (
                             <li key={index} onClick={handleClickSuggested}>
                                 {title}
