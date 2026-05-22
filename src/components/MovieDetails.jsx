@@ -2,10 +2,18 @@ import "../styles/movieDetails.css";
 
 const MOVIE_IMAGE_API = "https://image.tmdb.org/t/p/w500/";
 
-export default function MovieDetails({ movieDetails, loading, error }) {
+export default function MovieDetails({
+    movieDetails,
+    loading,
+    error,
+    onAddFavorite,
+    onRemoveFavorite,
+    favorites,
+}) {
     if (!movieDetails) return;
 
     const {
+        id,
         title,
         rating,
         voteCount,
@@ -16,6 +24,7 @@ export default function MovieDetails({ movieDetails, loading, error }) {
         posterPath,
         genres,
     } = movieDetails;
+    const isFavorite = favorites.find((favorite) => favorite.id === id);
 
     function getVoteCount() {
         const formatter = new Intl.NumberFormat("en-US", {
@@ -23,6 +32,20 @@ export default function MovieDetails({ movieDetails, loading, error }) {
             compactDisplay: "short",
         });
         return formatter.format(voteCount);
+    }
+
+    function handleClick() {
+        if (isFavorite) {
+            onRemoveFavorite(id);
+        } else {
+            const favoriteMovie = {
+                id,
+                posterPath,
+                title,
+                releaseYear,
+            };
+            onAddFavorite(favoriteMovie);
+        }
     }
 
     return (
@@ -68,7 +91,7 @@ export default function MovieDetails({ movieDetails, loading, error }) {
                     <h4>Plot</h4>
                     <p id="details__plot">{plot}</p>
 
-                    <button id="add-favorites__button">
+                    <button id="add-favorites__button" onClick={handleClick}>
                         <picture>
                             <img
                                 src="./favorite_icon.svg"
@@ -76,7 +99,11 @@ export default function MovieDetails({ movieDetails, loading, error }) {
                                 height="25px"
                             ></img>
                         </picture>
-                        <p>Add to favorites</p>
+                        {isFavorite ? (
+                            <p>Remove from favorites</p>
+                        ) : (
+                            <p>Add to favorites</p>
+                        )}
                     </button>
                 </>
             )}

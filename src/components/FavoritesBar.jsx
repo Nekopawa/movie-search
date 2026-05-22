@@ -1,50 +1,46 @@
 import "../styles/favoritesBar.css";
 
-export default function FavoritesBar() {
-    const temporaryFilm = {
-        id: 122,
-        title: "Flow",
-        year: 2024,
-        rating: 7.8,
-        image: "./temporaryFilm.jpg",
-    };
+const MOVIE_IMAGE_API = "https://image.tmdb.org/t/p/w500/";
 
-    const { id, title, year, rating, image } = temporaryFilm;
-
+export default function FavoritesBar({ favorites, onRemoveFavorite }) {
     return (
         <section id="favorites__container">
             <div id="favorites__title">
                 <h2>Your Favorites</h2>
-                <span id="favorites_count">6</span>
+                <span id="favorites_count">{favorites.length}</span>
             </div>
             <div id="favorites__list">
-                {
-                    //temporary list
-                    Array.from({ length: 6 }).map((_, index) => {
-                        return (
-                            <div className="favorite__card" key={index}>
+                {favorites.map((movie) => {
+                    return (
+                        <div className="favorite__card" key={movie.id}>
+                            <picture>
+                                <img
+                                    src={`${MOVIE_IMAGE_API}${movie.posterPath}`}
+                                    alt="Movie poster"
+                                    height="200px"
+                                ></img>
+                            </picture>
+                            <button
+                                className="delete__button"
+                                onClick={() => onRemoveFavorite(movie.id)}
+                            >
+                                x
+                            </button>
+                            <p className="favorite__title">{movie.title}</p>
+                            <div className="favorite-card__text">
                                 <picture>
                                     <img
-                                        src={image}
-                                        alt="Movie poster"
-                                        height="200px"
+                                        src="./favorite_icon2.svg"
+                                        height="20px"
                                     ></img>
                                 </picture>
-                                <button className="delete__button">x</button>
-                                <p className="favorite__title">{title}</p>
-                                <div className="favorite-card__text">
-                                    <picture>
-                                        <img
-                                            src="./favorite_icon2.svg"
-                                            height="20px"
-                                        ></img>
-                                    </picture>
-                                    <p className="favorite__year">{year}</p>
-                                </div>
+                                <p className="favorite__year">
+                                    {movie.releaseYear}
+                                </p>
                             </div>
-                        );
-                    })
-                }
+                        </div>
+                    );
+                })}
             </div>
         </section>
     );

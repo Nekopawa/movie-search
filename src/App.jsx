@@ -19,6 +19,18 @@ function App() {
     const [errorDetails, setErrorDetails] = useState(null);
     const [selectedMovieId, setSelectedMovieId] = useState(414906);
     const [movieDetails, setMovieDetails] = useState(null);
+    const [favorites, setFavorites] = useState(() => {
+        try {
+            const savedFavorites = localStorage.getItem("favorites");
+
+            if (!savedFavorites) return [];
+
+            const parsedFavorites = JSON.parse(savedFavorites);
+            return Array.isArray(parsedFavorites) ? parsedFavorites : [];
+        } catch {
+            return [];
+        }
+    });
 
     function handleSearch(query) {
         if (query) setQuery(encodeURIComponent(query));
@@ -26,6 +38,18 @@ function App() {
 
     function handleMovieDetails(movieId) {
         setSelectedMovieId(Number(movieId));
+    }
+
+    function handleAddFavorite(favoriteMovie) {
+        const movieExists = favorites.find(
+            (movie) => movie.id === favoriteMovie.id,
+        );
+
+        if (!movieExists) setFavorites((prev) => [...prev, favoriteMovie]);
+    }
+
+    function handleRemoveFavorite(id) {
+        setFavorites((prev) => prev.filter((favorite) => favorite.id !== id));
     }
 
     useEffect(() => {
@@ -157,9 +181,13 @@ function App() {
         createMovieDetails();
     }, [selectedMovieId, movies]);
 
+    useEffect(() => {
+        localStorage.setItem("favorites", JSON.stringify(favorites));
+    }, [favorites]);
+
     return (
         <>
-            <Header />
+            <Header favoritesCount={favorites.length} />
             <SearchBar onSearchMovies={handleSearch} />
             <SearchResults
                 movies={movies}
@@ -171,9 +199,15 @@ function App() {
                 movieDetails={movieDetails}
                 loading={loadingDetails}
                 error={errorDetails}
+                onAddFavorite={handleAddFavorite}
+                onRemoveFavorite={handleRemoveFavorite}
+                favorites={favorites}
             />
             <PopularSearches />
-            <FavoritesBar />
+            <FavoritesBar
+                favorites={favorites}
+                onRemoveFavorite={handleRemoveFavorite}
+            />
         </>
     );
 }

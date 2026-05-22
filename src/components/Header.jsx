@@ -1,6 +1,6 @@
 import "../styles/header.css";
 
-export default function Header() {
+export default function Header({ favoritesCount }) {
     return (
         <header>
             <div id="header__logo">
@@ -15,7 +15,7 @@ export default function Header() {
                     <img src="./favorite_icon.svg"></img>
                 </picture>
                 <p>Favorites</p>
-                <span id="favorites_count">6</span>
+                <span id="favorites_count">{favoritesCount}</span>
             </div>
         </header>
     );

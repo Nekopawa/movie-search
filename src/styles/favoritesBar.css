@@ -12,7 +12,7 @@
 #favorites__list {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    gap: 16px;
 }
 
 .favorite__title {
@@ -50,4 +50,5 @@
     border-radius: 50%;
     background-color: #d3d3d3aa;
     color: red;
+    cursor: pointer;
 }
