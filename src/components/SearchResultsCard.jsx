@@ -2,8 +2,9 @@ import "../styles/searchResultCard.css";
 
 const MOVIE_IMAGE_API = "https://image.tmdb.org/t/p/w500/";
 
-export default function SearchResultCard({ movie }) {
+export default function SearchResultCard({ movie, onClick }) {
     const {
+        id,
         poster_path: posterPath,
         title,
         release_date: releaseDate,
@@ -13,7 +14,7 @@ export default function SearchResultCard({ movie }) {
     const image = `${MOVIE_IMAGE_API}${posterPath}`;
 
     return (
-        <div className="movie_card">
+        <div className="movie_card" onClick={() => onClick(id)}>
             <picture>
                 <img src={image} height="180px"></img>
             </picture>

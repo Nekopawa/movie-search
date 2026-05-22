@@ -1,7 +1,12 @@
 import "../styles/searchResults.css";
 import SearchResultCard from "./SearchResultsCard";
 
-export default function SearchResults({ movies, loading, error }) {
+export default function SearchResults({
+    movies,
+    loading,
+    error,
+    onClickMovieCard,
+}) {
     return (
         <section id="search-results__container">
             <div id="search-results__title">
@@ -25,6 +30,7 @@ export default function SearchResults({ movies, loading, error }) {
                                 <SearchResultCard
                                     key={movie.id}
                                     movie={movie}
+                                    onClick={onClickMovieCard}
                                 />
                             );
                         })}

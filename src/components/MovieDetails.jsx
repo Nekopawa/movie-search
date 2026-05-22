@@ -1,55 +1,85 @@
 import "../styles/movieDetails.css";
 
-export default function MovieDetails() {
+const MOVIE_IMAGE_API = "https://image.tmdb.org/t/p/w500/";
+
+export default function MovieDetails({ movieDetails, loading, error }) {
+    if (!movieDetails) return;
+
+    const {
+        title,
+        rating,
+        voteCount,
+        releaseYear,
+        plot,
+        director,
+        runtime,
+        posterPath,
+        genres,
+    } = movieDetails;
+
+    function getVoteCount() {
+        const formatter = new Intl.NumberFormat("en-US", {
+            notation: "compact",
+            compactDisplay: "short",
+        });
+        return formatter.format(voteCount);
+    }
+
     return (
         <aside id="movie-details__container">
             <h2>Movie Details</h2>
-            <picture id="details__movie-poster">
-                <img
-                    src="./temporaryFilm.jpg"
-                    alt="Movie poster"
-                    height="250px"
-                ></img>
-            </picture>
+            {error ? (
+                <p id="movie-details-message">{error}</p>
+            ) : loading ? (
+                <p id="movie-details-message">Loading...</p>
+            ) : !movieDetails ? (
+                <p id="movie-details-message">No movie selected.</p>
+            ) : (
+                <>
+                    <picture id="details__movie-poster">
+                        <img
+                            src={`${MOVIE_IMAGE_API}${posterPath}`}
+                            alt="Movie poster"
+                            height="250px"
+                        ></img>
+                    </picture>
 
-            <h3>Flow</h3>
+                    <h3>{title}</h3>
 
-            <div id="details__rating">
-                <picture>
-                    <img src="./star_icon.svg"></img>
-                </picture>
-                <p id="details__rating-value">7.8/10</p>
-                <p id="details__votes">(133K)</p>
-            </div>
+                    <div id="details__rating">
+                        <picture>
+                            <img src="./star_icon.svg"></img>
+                        </picture>
+                        <p id="details__rating-value">{rating.toFixed(2)}/10</p>
+                        <p id="details__votes">({getVoteCount()})</p>
+                    </div>
 
-            <div id="details__movie-info">
-                <p>Year:</p>
-                <p>2024</p>
-                <p>Director:</p>
-                <p>Gints Zilbalodis</p>
-                <p>Genre:</p>
-                <p>Animation</p>
-                <p>Runtime:</p>
-                <p>90 min</p>
-            </div>
+                    <div id="details__movie-info">
+                        <p>Year:</p>
+                        <p>{releaseYear}</p>
+                        <p>Director:</p>
+                        <p>{director}</p>
+                        <p>Genre:</p>
+                        <p>{genres}</p>
+                        <p>Runtime:</p>
+                        <p>{runtime} min</p>
+                    </div>
 
-            <h4>Plot</h4>
-            <p id="details__plot">
-                Gato é um animal solitário, mas quando seu lar é destruído por
-                uma grande inundação, ele encontra refúgio em um barco habitado
-                por diversas espécies, tendo que se juntar a eles apesar das
-            </p>
+                    <h4>Plot</h4>
+                    <p id="details__plot">{plot}</p>
 
-            <button id="add-favorites__button">
-                <picture>
-                    <img
-                        src="./favorite_icon.svg"
-                        alt="Heart"
-                        height="25px"
-                    ></img>
-                </picture>
-                <p>Add to favorites</p>
-            </button>
+                    <button id="add-favorites__button">
+                        <picture>
+                            <img
+                                src="./favorite_icon.svg"
+                                alt="Heart"
+                                height="25px"
+                            ></img>
+                        </picture>
+                        <p>Add to favorites</p>
+                    </button>
+                </>
+            )}
         </aside>
     );
 }
