@@ -70,6 +70,7 @@ function App() {
                     (movie) => !movie.adult,
                 );
                 setMovies(moviesFiltered);
+                setSelectedMovieId(moviesFiltered[0].id);
             } catch (error) {
                 setError(error.message);
             } finally {
