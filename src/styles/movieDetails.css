@@ -15,6 +15,7 @@
 
 #movie-details__container h3 {
     font-size: 1.3rem;
+    margin-top: 10px;
 }
 
 #details__rating {
@@ -81,4 +82,11 @@
 
 #add-favorites__button p {
     margin-left: 8px;
+}
+
+@media screen and (min-width: 400px) {
+    #add-favorites__button {
+        width: 280px;
+        align-self: center;
+    }
 }

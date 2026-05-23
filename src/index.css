@@ -15,19 +15,40 @@
     color: var(--text-color);
 }
 
+body {
+    background-color: var(--background-color);
+}
+
 #root {
     min-height: 100vh;
-    max-width: 100vw;
+    max-width: 1600px;
+    margin: 0 auto;
     padding: 15px;
-    display: grid;
-    grid-template-areas:
-        "header header header header header"
-        "search search search search search"
-        "results results results details details"
-        "tags tags tags tags tags"
-        "favorites favorites favorites favorites favorites";
-    grid-gap: 15px 15px;
-    grid-template-rows: 0.3fr 1fr 3fr 0.5fr 1.5fr;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    background-color: var(--background-color);
+}
+
+@media screen and (max-width: 768px) {
+    #root {
+        display: flex;
+        flex-flow: column nowrap;
+    }
+
+    section,
+    aside {
+        margin-bottom: 15px;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    #root {
+        display: grid;
+        grid-template-areas:
+            "header header header header header"
+            "search search search search search"
+            "results results results details details"
+            "tags tags tags tags tags"
+            "favorites favorites favorites favorites favorites";
+        grid-gap: 15px 15px;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        place-content: center;
+    }
 }

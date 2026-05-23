@@ -7,9 +7,10 @@
 
 #popular-searches__container ul {
     display: flex;
-    flex-direction: row;
+    flex-flow: row wrap;
     justify-content: left;
     list-style-type: none;
+    gap: 10px 0;
 }
 
 #popular-searches__container ul li {

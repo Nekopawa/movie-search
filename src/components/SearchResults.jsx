@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import "../styles/searchResults.css";
 import SearchResultCard from "./SearchResultsCard";
 
@@ -7,6 +8,33 @@ export default function SearchResults({
     error,
     onClickMovieCard,
 }) {
+    const [visibleMovies, setVisibleMovies] = useState(8);
+
+    useEffect(() => {
+        function updateVisibleMovies() {
+            if (window.innerWidth >= 1700) {
+                setVisibleMovies(12);
+            } else if (window.innerWidth >= 1550) {
+                setVisibleMovies(10);
+            } else if (window.innerWidth >= 1100) {
+                setVisibleMovies(8);
+            } else if (window.innerWidth >= 768) {
+                setVisibleMovies(9);
+            } else if (window.innerWidth >= 550 && window.innerWidth < 700) {
+                setVisibleMovies(9);
+            } else {
+                setVisibleMovies(8);
+            }
+        }
+
+        updateVisibleMovies();
+        window.addEventListener("resize", updateVisibleMovies);
+
+        return () => {
+            window.removeEventListener("resize", updateVisibleMovies);
+        };
+    }, []);
+
     return (
         <section id="search-results__container">
             <div id="search-results__title">
@@ -23,9 +51,7 @@ export default function SearchResults({
             ) : (
                 <>
                     <div id="search-results__grid">
-                        {movies.map((movie, index) => {
-                            //implement Load More button
-                            if (index > 7) return;
+                        {movies.slice(0, visibleMovies).map((movie) => {
                             return (
                                 <SearchResultCard
                                     key={movie.id}
