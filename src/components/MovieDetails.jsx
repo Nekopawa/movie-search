@@ -55,8 +55,6 @@ export default function MovieDetails({
                 <p id="movie-details-message">{error}</p>
             ) : loading ? (
                 <p id="movie-details-message">Loading...</p>
-            ) : !movieDetails ? (
-                <p id="movie-details-message">No movie selected.</p>
             ) : (
                 <>
                     <picture id="details__movie-poster">

@@ -39,7 +39,11 @@ export default function SearchResults({
         <section id="search-results__container">
             <div id="search-results__title">
                 <h2>Search Results</h2>
-                <div id="results_amount">{movies.length}</div>
+                <div id="results_amount">
+                    {movies.length > visibleMovies
+                        ? visibleMovies
+                        : movies.length}
+                </div>
             </div>
 
             {error ? (
