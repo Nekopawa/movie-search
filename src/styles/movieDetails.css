@@ -15,6 +15,17 @@
     justify-content: center;
 }
 
+#details__no-poster {
+    height: 250px;
+    width: 166px;
+    background-color: black;
+    align-self: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
 #movie-details__container h3 {
     font-size: 1.3rem;
     margin-top: 10px;

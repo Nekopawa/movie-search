@@ -132,17 +132,19 @@ function App() {
                     vote_count: voteCount,
                     release_date: releaseDate,
                     poster_path: posterPath,
-                    overview: plot,
+                    overview,
                     genres,
                     runtime,
                 } = fullMovieDetails;
-                const releaseYear = releaseDate.substr(0, 4);
-                const genreNames = genres.map((genre) => genre.name).join(", ");
-
+                const releaseYear = releaseDate
+                    ? releaseDate.substr(0, 4)
+                    : "Unknown";
+                const genreNames =
+                    genres.length > 0
+                        ? genres.map((genre) => genre.name).join(", ")
+                        : "Unknown";
+                const plot = overview ? overview : "Unknown";
                 let director = await fetchDirector();
-                if (!director) {
-                    director = "Unknown";
-                }
 
                 const details = {
                     id,
@@ -191,10 +193,11 @@ function App() {
                 }
 
                 const data = await response.json();
-                const director = data.crew.find(
+                const director = data.crew?.find(
                     (member) => member.job === "Director",
                 );
-                return director.name;
+
+                return director ? director.name : "Unknown";
             } catch (err) {
                 setErrorDetails(err.message);
             }

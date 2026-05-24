@@ -10,14 +10,18 @@ export default function SearchResultCard({ movie, onClick }) {
         release_date: releaseDate,
         vote_average: rating,
     } = movie;
-    const year = releaseDate.substr(0, 4);
+    const year = releaseDate ? releaseDate.substr(0, 4) : "Unknown";
     const image = `${MOVIE_IMAGE_API}${posterPath}`;
 
     return (
         <div className="movie_card" onClick={() => onClick(id)}>
-            <picture>
-                <img src={image} height="180px"></img>
-            </picture>
+            {posterPath ? (
+                <picture>
+                    <img src={image} height="180px"></img>
+                </picture>
+            ) : (
+                <p className="movie_card-no-poster">No movie poster found</p>
+            )}
             <h3>{title}</h3>
             <p className="card__year">{year}</p>
             <div className="card__rating">

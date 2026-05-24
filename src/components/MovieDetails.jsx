@@ -57,14 +57,17 @@ export default function MovieDetails({
                 <p id="movie-details-message">Loading...</p>
             ) : (
                 <>
-                    <picture id="details__movie-poster">
-                        <img
-                            src={`${MOVIE_IMAGE_API}${posterPath}`}
-                            alt="Movie poster"
-                            height="250px"
-                        ></img>
-                    </picture>
-
+                    {posterPath ? (
+                        <picture id="details__movie-poster">
+                            <img
+                                src={`${MOVIE_IMAGE_API}${posterPath}`}
+                                alt="Movie poster"
+                                height="250px"
+                            ></img>
+                        </picture>
+                    ) : (
+                        <p id="details__no-poster">No movie poster found</p>
+                    )}
                     <h3>{title}</h3>
 
                     <div id="details__rating">
@@ -83,7 +86,7 @@ export default function MovieDetails({
                         <p>Genre:</p>
                         <p>{genres}</p>
                         <p>Runtime:</p>
-                        <p>{runtime} min</p>
+                        <p>{runtime ? `${runtime} min` : "Unknown"}</p>
                     </div>
 
                     <h4>Plot</h4>

@@ -21,6 +21,16 @@
     text-overflow: ellipsis;
 }
 
+.movie_card-no-poster {
+    height: 180px;
+    width: 121px;
+    background-color: black;
+    border-radius: 10px 10px 0 0;
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+
 .card__year {
     color: var(--text-color-secondary);
     font-size: 12px;
