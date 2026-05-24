@@ -11,11 +11,11 @@ export default function SearchResultCard({ movie, onClick }) {
         vote_average: rating,
     } = movie;
     const year = releaseDate ? releaseDate.substr(0, 4) : "Unknown";
-    const image = `${MOVIE_IMAGE_API}${posterPath}`;
+    const image = posterPath ? `${MOVIE_IMAGE_API}${posterPath}` : null;
 
     return (
         <div className="movie_card" onClick={() => onClick(id)}>
-            {posterPath ? (
+            {image ? (
                 <picture>
                     <img src={image} height="180px"></img>
                 </picture>

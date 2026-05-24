@@ -40,7 +40,7 @@ function App() {
             if (!encodedQuery) return;
 
             setPage(1);
-            setQuery(encodeURIComponent(encodedQuery));
+            setQuery(encodedQuery);
         }
     }
 

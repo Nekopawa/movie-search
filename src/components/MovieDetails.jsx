@@ -10,7 +10,14 @@ export default function MovieDetails({
     onRemoveFavorite,
     favorites,
 }) {
-    if (!movieDetails) return;
+    if (!movieDetails) {
+        return (
+            <aside id="movie-details__container">
+                <h2>Movie Details</h2>
+                <p id="movie-details-message">No movie selected</p>
+            </aside>
+        );
+    }
 
     const {
         id,
@@ -74,7 +81,9 @@ export default function MovieDetails({
                         <picture>
                             <img src="./star_icon.svg"></img>
                         </picture>
-                        <p id="details__rating-value">{rating.toFixed(2)}/10</p>
+                        <p id="details__rating-value">
+                            {rating ? `${rating.toFixed(2)}/10` : "Unknown/10"}
+                        </p>
                         <p id="details__votes">({getVoteCount()})</p>
                     </div>
 

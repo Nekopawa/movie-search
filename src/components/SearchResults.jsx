@@ -79,7 +79,13 @@ export default function SearchResults({
                             );
                         })}
                     </div>
-                    <button id="load-more__button" onClick={handleLoadMore}>
+                    <button
+                        id="load-more__button"
+                        onClick={handleLoadMore}
+                        style={{
+                            display: movies.length <= visibleMovies && "none",
+                        }}
+                    >
                         Load More
                     </button>
                 </>
