@@ -8,11 +8,12 @@ import SearchBar from "./components/SearchBar";
 import SearchResults from "./components/SearchResults";
 
 const API_KEY = import.meta.env.VITE_API_KEY;
-const MOVIES_API = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=`;
+const MOVIES_API = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}`;
 
 function App() {
     const [movies, setMovies] = useState([]);
     const [query, setQuery] = useState("batman");
+    const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const [loadingDetails, setLoadingDetails] = useState(false);
     const [error, setError] = useState(null);
@@ -33,7 +34,18 @@ function App() {
     });
 
     function handleSearch(query) {
-        if (query) setQuery(encodeURIComponent(query));
+        if (query) {
+            const encodedQuery = encodeURIComponent(query.trim());
+
+            if (!encodedQuery) return;
+
+            setPage(1);
+            setQuery(encodeURIComponent(encodedQuery));
+        }
+    }
+
+    function handleLoadMore() {
+        setPage((prev) => prev + 1);
     }
 
     function handleMovieDetails(movieId) {
@@ -59,7 +71,9 @@ function App() {
             setLoading(true);
             setError(null);
             try {
-                const response = await fetch(`${MOVIES_API}${query}`);
+                const response = await fetch(
+                    `${MOVIES_API}&query=${query}&page=${page}`,
+                );
                 if (!response.ok) {
                     throw new Error(
                         `Error fetching data. Status: ${response.status}`,
@@ -69,8 +83,15 @@ function App() {
                 const moviesFiltered = data.results.filter(
                     (movie) => !movie.adult,
                 );
-                setMovies(moviesFiltered);
-                setSelectedMovieId(moviesFiltered[0].id);
+
+                if (page === 1) {
+                    setMovies(moviesFiltered);
+                    if (moviesFiltered.length > 0) {
+                        setSelectedMovieId(moviesFiltered[0].id);
+                    }
+                } else {
+                    setMovies((prev) => [...prev, ...moviesFiltered]);
+                }
             } catch (error) {
                 setError(error.message);
             } finally {
@@ -79,7 +100,7 @@ function App() {
         }
 
         fetchMovies();
-    }, [query]);
+    }, [query, page]);
 
     useEffect(() => {
         async function createMovieDetails() {
@@ -191,10 +212,14 @@ function App() {
             <Header favoritesCount={favorites.length} />
             <SearchBar onSearchMovies={handleSearch} />
             <SearchResults
+                //Passing key beacause when it changes, the whole component remounts,
+                //and so reseting the value of visibleMovies
+                key={query}
                 movies={movies}
                 loading={loading}
                 error={error}
                 onClickMovieCard={handleMovieDetails}
+                onLoadMore={handleLoadMore}
             />
             <MovieDetails
                 movieDetails={movieDetails}

@@ -7,24 +7,40 @@ export default function SearchResults({
     loading,
     error,
     onClickMovieCard,
+    onLoadMore,
 }) {
+    const [cardsPerLoad, setCardsPerLoad] = useState(8);
     const [visibleMovies, setVisibleMovies] = useState(8);
+
+    function getCardsPerLoad() {
+        if (window.innerWidth >= 1700) {
+            return 12;
+        } else if (window.innerWidth >= 1550) {
+            return 10;
+        } else if (window.innerWidth >= 1100) {
+            return 8;
+        } else if (window.innerWidth >= 550) {
+            return 9;
+        } else {
+            return 8;
+        }
+    }
+
+    function handleLoadMore() {
+        const nextVisibleMovies = visibleMovies + cardsPerLoad;
+
+        setVisibleMovies(nextVisibleMovies);
+
+        if (nextVisibleMovies > movies.length) {
+            onLoadMore();
+        }
+    }
 
     useEffect(() => {
         function updateVisibleMovies() {
-            if (window.innerWidth >= 1700) {
-                setVisibleMovies(12);
-            } else if (window.innerWidth >= 1550) {
-                setVisibleMovies(10);
-            } else if (window.innerWidth >= 1100) {
-                setVisibleMovies(8);
-            } else if (window.innerWidth >= 768) {
-                setVisibleMovies(9);
-            } else if (window.innerWidth >= 550 && window.innerWidth < 700) {
-                setVisibleMovies(9);
-            } else {
-                setVisibleMovies(8);
-            }
+            const amount = getCardsPerLoad();
+            setCardsPerLoad(amount);
+            setVisibleMovies(amount);
         }
 
         updateVisibleMovies();
@@ -40,9 +56,7 @@ export default function SearchResults({
             <div id="search-results__title">
                 <h2>Search Results</h2>
                 <div id="results_amount">
-                    {movies.length > visibleMovies
-                        ? visibleMovies
-                        : movies.length}
+                    {Math.min(visibleMovies, movies.length)}
                 </div>
             </div>
 
@@ -65,7 +79,9 @@ export default function SearchResults({
                             );
                         })}
                     </div>
-                    <button id="load-more__button">Load More</button>
+                    <button id="load-more__button" onClick={handleLoadMore}>
+                        Load More
+                    </button>
                 </>
             )}
         </section>
