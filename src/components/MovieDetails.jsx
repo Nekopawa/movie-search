@@ -10,7 +10,21 @@ export default function MovieDetails({
     onRemoveFavorite,
     favorites,
 }) {
-    if (!movieDetails) {
+    if (loading) {
+        return (
+            <aside id="movie-details__container">
+                <h2>Movie Details</h2>
+                <p id="movie-details-message">Loading...</p>
+            </aside>
+        );
+    } else if (error) {
+        return (
+            <aside id="movie-details__container">
+                <h2>Movie Details</h2>
+                <p id="movie-details-message">{error}</p>
+            </aside>
+        );
+    } else if (!movieDetails) {
         return (
             <aside id="movie-details__container">
                 <h2>Movie Details</h2>
@@ -38,7 +52,7 @@ export default function MovieDetails({
             notation: "compact",
             compactDisplay: "short",
         });
-        return formatter.format(voteCount);
+        return voteCount ? formatter.format(voteCount) : "Unknown";
     }
 
     function handleClick() {
@@ -58,65 +72,59 @@ export default function MovieDetails({
     return (
         <aside id="movie-details__container">
             <h2>Movie Details</h2>
-            {error ? (
-                <p id="movie-details-message">{error}</p>
-            ) : loading ? (
-                <p id="movie-details-message">Loading...</p>
-            ) : (
-                <>
-                    {posterPath ? (
-                        <picture id="details__movie-poster">
-                            <img
-                                src={`${MOVIE_IMAGE_API}${posterPath}`}
-                                alt="Movie poster"
-                                height="250px"
-                            ></img>
-                        </picture>
+            <>
+                {posterPath ? (
+                    <picture id="details__movie-poster">
+                        <img
+                            src={`${MOVIE_IMAGE_API}${posterPath}`}
+                            alt="Movie poster"
+                            height="250px"
+                        ></img>
+                    </picture>
+                ) : (
+                    <p id="details__no-poster">No movie poster found</p>
+                )}
+                <h3>{title}</h3>
+
+                <div id="details__rating">
+                    <picture>
+                        <img src="./star_icon.svg"></img>
+                    </picture>
+                    <p id="details__rating-value">
+                        {rating ? `${rating.toFixed(2)}/10` : "Unknown/10"}
+                    </p>
+                    <p id="details__votes">({getVoteCount()})</p>
+                </div>
+
+                <div id="details__movie-info">
+                    <p>Year:</p>
+                    <p>{releaseYear}</p>
+                    <p>Director:</p>
+                    <p>{director}</p>
+                    <p>Genre:</p>
+                    <p>{genres}</p>
+                    <p>Runtime:</p>
+                    <p>{runtime ? `${runtime} min` : "Unknown"}</p>
+                </div>
+
+                <h4>Plot</h4>
+                <p id="details__plot">{plot}</p>
+
+                <button id="add-favorites__button" onClick={handleClick}>
+                    <picture>
+                        <img
+                            src="./favorite_icon.svg"
+                            alt="Heart"
+                            height="25px"
+                        ></img>
+                    </picture>
+                    {isFavorite ? (
+                        <p>Remove from favorites</p>
                     ) : (
-                        <p id="details__no-poster">No movie poster found</p>
+                        <p>Add to favorites</p>
                     )}
-                    <h3>{title}</h3>
-
-                    <div id="details__rating">
-                        <picture>
-                            <img src="./star_icon.svg"></img>
-                        </picture>
-                        <p id="details__rating-value">
-                            {rating ? `${rating.toFixed(2)}/10` : "Unknown/10"}
-                        </p>
-                        <p id="details__votes">({getVoteCount()})</p>
-                    </div>
-
-                    <div id="details__movie-info">
-                        <p>Year:</p>
-                        <p>{releaseYear}</p>
-                        <p>Director:</p>
-                        <p>{director}</p>
-                        <p>Genre:</p>
-                        <p>{genres}</p>
-                        <p>Runtime:</p>
-                        <p>{runtime ? `${runtime} min` : "Unknown"}</p>
-                    </div>
-
-                    <h4>Plot</h4>
-                    <p id="details__plot">{plot}</p>
-
-                    <button id="add-favorites__button" onClick={handleClick}>
-                        <picture>
-                            <img
-                                src="./favorite_icon.svg"
-                                alt="Heart"
-                                height="25px"
-                            ></img>
-                        </picture>
-                        {isFavorite ? (
-                            <p>Remove from favorites</p>
-                        ) : (
-                            <p>Add to favorites</p>
-                        )}
-                    </button>
-                </>
-            )}
+                </button>
+            </>
         </aside>
     );
 }
