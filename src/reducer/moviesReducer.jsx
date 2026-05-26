@@ -50,7 +50,7 @@ export function reducer(state, action) {
             return {
                 ...state,
                 loadingMovies: false,
-                errorMovies: action.message,
+                errorMovies: action.error,
             };
         }
         case "SEARCH_SUCCESS": {
@@ -58,7 +58,10 @@ export function reducer(state, action) {
             let firstMovieId = state.selectedMovieId;
             if (state.page === 1) {
                 moviesList = action.payload;
-                firstMovieId = moviesList.length > 0 && moviesList[0].id;
+                firstMovieId =
+                    moviesList.length > 0
+                        ? moviesList[0].id
+                        : state.selectedMovieId;
             } else {
                 moviesList = [...state.movies, ...action.payload];
             }
