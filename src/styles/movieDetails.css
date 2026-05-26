@@ -6,7 +6,6 @@
     padding: 15px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
 }
 
 #details__movie-poster {
@@ -83,7 +82,7 @@
     border: none;
     border-radius: 10px;
     color: var(--highlights);
-    margin-top: 20px;
+    margin-top: auto;
     color: white;
     font-size: 1rem;
     display: flex;

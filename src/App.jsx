@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer } from "react";
 import "./App.css";
 import FavoritesBar from "./components/FavoritesBar";
 import Header from "./components/Header";
@@ -6,32 +6,18 @@ import MovieDetails from "./components/MovieDetails";
 import PopularSearches from "./components/PopularSearches";
 import SearchBar from "./components/SearchBar";
 import SearchResults from "./components/SearchResults";
+import {
+    ACTION_TYPES,
+    init,
+    INITIAL_STATE,
+    reducer,
+} from "./reducer/moviesReducer";
 
 const API_KEY = import.meta.env.VITE_API_KEY;
 const MOVIES_API = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}`;
 
 function App() {
-    const [movies, setMovies] = useState([]);
-    const [query, setQuery] = useState("batman");
-    const [page, setPage] = useState(1);
-    const [loading, setLoading] = useState(false);
-    const [loadingDetails, setLoadingDetails] = useState(false);
-    const [error, setError] = useState(null);
-    const [errorDetails, setErrorDetails] = useState(null);
-    const [selectedMovieId, setSelectedMovieId] = useState(414906);
-    const [movieDetails, setMovieDetails] = useState(null);
-    const [favorites, setFavorites] = useState(() => {
-        try {
-            const savedFavorites = localStorage.getItem("favorites");
-
-            if (!savedFavorites) return [];
-
-            const parsedFavorites = JSON.parse(savedFavorites);
-            return Array.isArray(parsedFavorites) ? parsedFavorites : [];
-        } catch {
-            return [];
-        }
-    });
+    const [state, dispatch] = useReducer(reducer, INITIAL_STATE, init);
 
     function handleSearch(query) {
         if (query) {
@@ -39,40 +25,40 @@ function App() {
 
             if (!encodedQuery) return;
 
-            setPage(1);
-            setQuery(encodedQuery);
+            dispatch({ type: ACTION_TYPES.CHANGED_QUERY, query: encodedQuery });
         }
     }
 
     function handleLoadMore() {
-        setPage((prev) => prev + 1);
+        dispatch({ type: ACTION_TYPES.LOAD_MORE });
     }
 
     function handleMovieDetails(movieId) {
-        setSelectedMovieId(Number(movieId));
+        dispatch({
+            type: ACTION_TYPES.CHANGE_SELECTED_MOVIE,
+            movieId: movieId,
+        });
     }
 
     function handleAddFavorite(favoriteMovie) {
-        const movieExists = favorites.find(
+        const movieExists = state.favorites.find(
             (movie) => movie.id === favoriteMovie.id,
         );
 
-        if (!movieExists) setFavorites((prev) => [...prev, favoriteMovie]);
+        if (!movieExists)
+            dispatch({ type: ACTION_TYPES.ADD_FAVORITE, movie: favoriteMovie });
     }
 
     function handleRemoveFavorite(id) {
-        setFavorites((prev) => prev.filter((favorite) => favorite.id !== id));
+        dispatch({ type: ACTION_TYPES.REMOVE_FAVORITE, movieId: id });
     }
 
     useEffect(() => {
         async function fetchMovies() {
-            if (query.trim() === "") setMovies([]);
-
-            setLoading(true);
-            setError(null);
+            dispatch({ type: ACTION_TYPES.SEARCH_START });
             try {
                 const response = await fetch(
-                    `${MOVIES_API}&query=${query}&page=${page}`,
+                    `${MOVIES_API}&query=${state.query}&page=${state.page}`,
                 );
                 if (!response.ok) {
                     throw new Error(
@@ -84,44 +70,43 @@ function App() {
                     (movie) => !movie.adult,
                 );
 
-                if (page === 1) {
-                    setMovies(moviesFiltered);
-                    if (moviesFiltered.length > 0) {
-                        setSelectedMovieId(moviesFiltered[0].id);
-                    }
-                } else {
-                    setMovies((prev) => [...prev, ...moviesFiltered]);
-                }
+                dispatch({
+                    type: ACTION_TYPES.SEARCH_SUCCESS,
+                    payload: moviesFiltered,
+                });
             } catch (error) {
-                setError(error.message);
-            } finally {
-                setLoading(false);
+                dispatch({
+                    type: ACTION_TYPES.SEARCH_ERROR,
+                    error: error.message,
+                });
             }
         }
 
         fetchMovies();
-    }, [query, page]);
+    }, [state.query, state.page]);
 
     useEffect(() => {
         async function createMovieDetails() {
-            setLoadingDetails(true);
-            setErrorDetails(null);
-
-            const filteredMovie = movies.find(
-                (movie) => movie.id === selectedMovieId,
+            dispatch({ type: ACTION_TYPES.DETAILS_SEARCH_START });
+            const filteredMovie = state.movies.find(
+                (movie) => movie.id === state.selectedMovieId,
             );
 
             if (!filteredMovie) {
-                setLoadingDetails(false);
-                setErrorDetails("Movie not found.");
+                dispatch({
+                    type: ACTION_TYPES.DETAILS_SEARCH_ERROR,
+                    error: "Movie not found.",
+                });
                 return;
             }
 
             try {
                 const fullMovieDetails = await fetchFullMovieDetails();
                 if (!fullMovieDetails) {
-                    setMovieDetails(null);
-                    setErrorDetails("Could not fetch movie details.");
+                    dispatch({
+                        type: ACTION_TYPES.DETAILS_SEARCH_ERROR,
+                        error: "Could not fetch movie details.",
+                    });
                     return;
                 }
 
@@ -158,16 +143,20 @@ function App() {
                     posterPath,
                     genres: genreNames,
                 };
-                setMovieDetails(details);
+                dispatch({
+                    type: ACTION_TYPES.DETAILS_SEARCH_SUCCESS,
+                    payload: details,
+                });
             } catch (err) {
-                setErrorDetails(err.message);
-            } finally {
-                setLoadingDetails(false);
+                dispatch({
+                    type: ACTION_TYPES.DETAILS_SEARCH_ERROR,
+                    error: err.message,
+                });
             }
         }
 
         async function fetchFullMovieDetails() {
-            const url = `https://api.themoviedb.org/3/movie/${selectedMovieId}?api_key=${API_KEY}`;
+            const url = `https://api.themoviedb.org/3/movie/${state.selectedMovieId}?api_key=${API_KEY}`;
             try {
                 const response = await fetch(url);
                 if (!response.ok) {
@@ -178,12 +167,15 @@ function App() {
                 const data = await response.json();
                 return data;
             } catch (err) {
-                setErrorDetails(err.message);
+                dispatch({
+                    type: ACTION_TYPES.DETAILS_SEARCH_ERROR,
+                    error: err.message,
+                });
             }
         }
 
         async function fetchDirector() {
-            const url = `https://api.themoviedb.org/3/movie/${selectedMovieId}/credits?api_key=${API_KEY}`;
+            const url = `https://api.themoviedb.org/3/movie/${state.selectedMovieId}/credits?api_key=${API_KEY}`;
             try {
                 const response = await fetch(url);
                 if (!response.ok) {
@@ -199,42 +191,45 @@ function App() {
 
                 return director ? director.name : "Unknown";
             } catch (err) {
-                setErrorDetails(err.message);
+                dispatch({
+                    type: ACTION_TYPES.DETAILS_SEARCH_ERROR,
+                    error: err.message,
+                });
             }
         }
 
         createMovieDetails();
-    }, [selectedMovieId, movies]);
+    }, [state.selectedMovieId, state.movies]);
 
     useEffect(() => {
-        localStorage.setItem("favorites", JSON.stringify(favorites));
-    }, [favorites]);
+        localStorage.setItem("favorites", JSON.stringify(state.favorites));
+    }, [state.favorites]);
 
     return (
         <>
-            <Header favoritesCount={favorites.length} />
+            <Header favoritesCount={state.favorites.length} />
             <SearchBar onSearchMovies={handleSearch} />
             <SearchResults
                 //Passing key beacause when it changes, the whole component remounts,
                 //and so reseting the value of visibleMovies
-                key={query}
-                movies={movies}
-                loading={loading}
-                error={error}
+                key={state.query}
+                movies={state.movies}
+                loading={state.loadingMovies}
+                error={state.errorMovies}
                 onClickMovieCard={handleMovieDetails}
                 onLoadMore={handleLoadMore}
             />
             <MovieDetails
-                movieDetails={movieDetails}
-                loading={loadingDetails}
-                error={errorDetails}
+                movieDetails={state.movieDetails}
+                loading={state.loadingDetails}
+                error={state.errorDetails}
                 onAddFavorite={handleAddFavorite}
                 onRemoveFavorite={handleRemoveFavorite}
-                favorites={favorites}
+                favorites={state.favorites}
             />
             <PopularSearches onSearchMovies={handleSearch} />
             <FavoritesBar
-                favorites={favorites}
+                favorites={state.favorites}
                 onRemoveFavorite={handleRemoveFavorite}
             />
         </>
